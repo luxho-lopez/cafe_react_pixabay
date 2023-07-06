@@ -1,16 +1,24 @@
 import { Component } from "react";
 import Buscador from "./components/Buscador";
+import Resultado from "./components/Resultado";
 
 class App extends Component {
 
 	state = {
-		termino : ''
+		termino : '',
+		imagenes : []
 	}
 
 	consultarApi = () => {
-		const url = `https://pixabay.com/api/?key=37985450-29d841b18aa91b2ec3dfc8aec&q=${ this.state.termino }`;
+		const termino = this.state.termino;
 
-		console.log(url)
+		const url = `https://pixabay.com/api/?key=37985450-29d841b18aa91b2ec3dfc8aec&q=${ termino }`;
+
+		// console.log(url)
+
+		fetch(url)
+			.then(respuesta => respuesta.json())
+			.then(resultado => this.setState( { imagenes : resultado.hits } ) )
 	}
 
 	datosBusqueda = (termino) => {
@@ -33,7 +41,10 @@ class App extends Component {
 					/>
 				</div>
 
-				{this.state.termino}
+				<Resultado 
+					imagenes={ this.state.imagenes }
+				/>
+
 			</div>
 		);
 	}
